@@ -1,0 +1,138 @@
+
+:root{
+  --red:#B81722;
+  --green:#1C6B2A;
+  --white:#fff5f5;
+  --gold:#f6d36b;
+  --ok:#1e7e34;
+  --bad:#c82333;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family: 'Mountains of Christmas', cursive, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Apple Color Emoji','Segoe UI Emoji';
+  background: url('../assets/background.jpg') center/cover fixed no-repeat;
+  color:#222;
+}
+body::before{
+  content:'';
+  position:fixed; inset:0;
+  background: rgba(255,255,255,0.55);
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* Banner */
+.banner{
+  display:flex; justify-content:center; align-items:center;
+  padding:24px 12px 12px;
+}
+.banner-inner{
+  background: linear-gradient(180deg, #b30000 0%, #a00000 100%);
+  color:#fff;
+  border-radius:20px;
+  border:4px solid var(--gold);
+  text-align:center;
+  padding:16px 24px;
+  max-width:720px; width:min(92vw, 720px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.15);
+}
+.ribbon-top,.ribbon-bottom{
+  height:8px; border-radius:6px; background:var(--green); margin:0 auto 10px; width:80%;
+}
+.ribbon-bottom{ margin:10px auto 0; }
+.title{ font-size:2.4rem; margin:0; letter-spacing:1px; }
+.subtitle{ margin:.25rem 0 0; font-size:1.1rem; color:var(--gold); text-transform:uppercase; letter-spacing:2px; }
+
+/* Calendar */
+.calendar-grid{
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:12px;
+  width:min(92vw, 720px);
+  margin:18px auto 30px;
+}
+.day-box{
+  aspect-ratio:1/1;
+  width:100%;
+  border-radius:12px;
+  border:3px solid #fff;
+  color:#fff;
+  font-weight:700;
+  font-size: clamp(1.2rem, 3.2vw, 1.8rem);
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  box-shadow: 0 6px 14px rgba(0,0,0,.18);
+  transition: transform .12s ease, filter .2s ease;
+  position:relative;
+}
+.day-box.red{ background:linear-gradient(180deg, #d21f2b, #a81622); }
+.day-box.green{ background:linear-gradient(180deg, #23904a, #1c6b2a); }
+.day-box:hover{ transform:translateY(-2px); filter:brightness(1.08); }
+.day-box.opened{
+  background: repeating-linear-gradient(45deg, #fafafa, #fafafa 12px, #f1f1f1 12px, #f1f1f1 24px);
+  color:#222;
+  border-color: var(--gold);
+  cursor: default;
+  pointer-events: none;
+}
+.day-box.opened::after{
+  content:'🎁';
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size: clamp(1.5rem, 4vw, 2.2rem);
+}
+
+/* Popup */
+#popup{
+  position:fixed; inset:0; background:rgba(0,0,0,.55);
+  display:flex; align-items:center; justify-content:center;
+  padding:16px; z-index:1000;
+}
+#popup.hidden{ display:none !important; }
+.popup-content{
+  background:#ffffff; color:#222;
+  width:min(92vw, 520px);
+  border-radius:14px; border:4px solid var(--green);
+  padding:20px 18px;
+  text-align:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+.popup-content h2{ margin:0 0 12px; color:var(--red); }
+.question-img{ max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+.answer-form{
+  margin:12px auto 6px; display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap;
+}
+.answer-label{ font-weight:700; }
+.answer-input{
+  padding:6px 8px; border:2px solid #ccc; border-radius:8px; min-width:120px; font-size:1rem; font-family:inherit;
+}
+.submit-btn{
+  background:var(--green); color:#fff; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700;
+}
+.submit-btn:hover{ filter:brightness(1.05); }
+.answer-feedback{ font-weight:700; margin:6px 0 8px; }
+.answer-feedback.ok{ color: var(--ok); }
+.answer-feedback.bad{ color: var(--bad); }
+
+.close-btn{
+  background:var(--red); color:#fff; border:none;
+  padding:10px 16px; border-radius:9px; cursor:pointer; font-weight:700;
+}
+.close-btn:hover{ filter:brightness(1.1); }
+
+/* Music button */
+.mute-btn{
+  position:fixed; top:12px; right:12px;
+  width:44px; height:44px; border-radius:50%;
+  border:3px solid var(--green); background:#ffffffcc;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; cursor:pointer; z-index:1100;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  pointer-events:auto;
+}
+
+/* Footer */
+.footer{ text-align:center; color:#555; margin:20px 0 28px; }
