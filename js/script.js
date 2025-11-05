@@ -120,9 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <input type="file" id="upload-input" name="files[]" multiple required>
           <button type="submit" class="upload-btn">Upload</button>
         </form>
-        <p class="uploads-link">
-          After uploading, you’ll see a confirmation page from the form backend. You’ll also receive them in your backend dashboard/email.
-        </p>
         <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
       `;
     } else {
