@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (dayNum === 10) {
         try { openSfx.currentTime = 0; openSfx.play(); } catch(_){}
         box.classList.add('opened');
-        let opened = JSON.parse(localStorage.getItem('lhian_opened_days') || '[]');
+        opened = JSON.parse(localStorage.getItem('lhian_opened_days') || '[]');
         if (!opened.includes(dayNum)) {
           opened.push(dayNum);
           localStorage.setItem('lhian_opened_days', JSON.stringify(opened));
