@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const audio    = document.getElementById('bg-music');
   const muteBtn  = document.getElementById('mute-btn');
   const yearEl   = document.getElementById('year');
+  const resetBtn = document.getElementById('reset-btn');
 
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -24,6 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
       else { audio.muted = false; audio.play().catch(()=>{}); muteBtn.textContent='🔊'; }
     }
     muteBtn.addEventListener('click', (e)=>{ e.stopPropagation(); isMuted=!isMuted; updateAudio(); });
+  }
+  if (resetBtn) {
+  resetBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!confirm('Reset all opened chests?')) return;
+
+    // Clear stored state and UI classes
+    localStorage.removeItem('lhian_opened_days');
+    opened = []; // reuse the outer "opened" variable
+    document.querySelectorAll('.day-box.opened').forEach(el => el.classList.remove('opened'));
+
+    // Close any open popup and give quick feedback
+    if (popup) popup.classList.add('hidden');
+    alert('All chests have been reset.');
+    });
   }
 
   const openSfx    = new Audio('assets/open.wav');
@@ -164,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (dayNum === 11) {
         try { openSfx.currentTime = 0; openSfx.play(); } catch(_){}
         box.classList.add('opened');
-        let opened = JSON.parse(localStorage.getItem('lhian_opened_days') || '[]');
+        opened = JSON.parse(localStorage.getItem('lhian_opened_days') || '[]');
         if (!opened.includes(dayNum)) {
           opened.push(dayNum);
           localStorage.setItem('lhian_opened_days', JSON.stringify(opened));
