@@ -252,10 +252,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderDay13Popup(){
-    popupContent.innerHTML = `
+  popupContent.innerHTML = `
     <h2 id="popup-title">You Know What To Do</h2>
 
-    <!-- Add this image line -->
     <img src="assets/stacker.png" alt="Stacker game" class="popup-image">
 
     <p><a href="https://filiprei.itch.io/stacker-arcade-game" target="_blank" rel="noopener">
@@ -266,27 +265,27 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="day13-done" class="submit-btn" type="button">Did it</button>
     <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
   `;
-  
-    popup.classList.remove('hidden');
-    bindCloseButton();
-  
-    const doneBtn = document.getElementById('day13-done');
-    doneBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      // Play victory trumpet
-      try {
-        const trumpet = document.getElementById('trumpetSfx'); // from index.html
-        trumpet.currentTime = 0;
-        trumpet.play();
-      } catch (_) {}
-  
-      // (Optional) show a quick success message
-      const msg = document.createElement('div');
-      msg.className = 'answer-feedback ok';
-      msg.textContent = 'Nice! 🎺 Victory!';
-      popupContent.insertBefore(msg, document.getElementById('close-btn'));
-    });
-  }
+
+  popup.classList.remove('hidden');
+  bindCloseButton();
+
+  const doneBtn = document.getElementById('day13-done');
+  const closeBtn = document.getElementById('close-btn');
+
+  doneBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+
+    // Play victory trumpet from assets/queen-royalty-trumpet.mp3
+    try {
+      const trumpet = document.getElementById('trumpetSfx');
+      trumpet.currentTime = 0;
+      trumpet.play();
+    } catch (_) {}
+
+    // Auto-close the popup (reuses your existing close logic)
+    if (closeBtn) closeBtn.click();
+  });
+}
 
   boxes.forEach(box => {
     box.addEventListener('click', () => {
