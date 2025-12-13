@@ -689,6 +689,231 @@ document.addEventListener('DOMContentLoaded', () => {
     renderQuestion();
   }
 
+  function renderDay17MathQuiz() {
+    // Math quiz questions based on uploaded images
+    const MATH_QUESTIONS = [
+      {
+        question: "The probability distribution table for a discrete random variable X is shown.\n\nWhat is the value of P(X = 3)?",
+        note: "Given: P(X=1) = 0.4, P(X=2) = 0.2",
+        options: ["0.2", "0.4", "1.2", "2.0"],
+        correct: 1 // 0.4
+      },
+      {
+        question: "Which graph could represent y = 4ˣ?",
+        options: [
+          "A. Exponential growth curve starting from origin",
+          "B. Exponential decay curve",
+          "C. Linear decreasing line",
+          "D. V-shaped graph"
+        ],
+        correct: 0 // A - exponential growth
+      },
+      {
+        question: "What is the domain of the function y = √(6 - x²)?",
+        options: [
+          "(0, √6)",
+          "[0, √6]",
+          "(-√6, √6)",
+          "[-√6, √6]"
+        ],
+        correct: 3 // D. [-√6, √6]
+      },
+      {
+        question: "Which of the following best represents the graph of y = -5x(x - 2)(3 - x)?",
+        note: "Consider the zeros at x = 0, 2, and 3",
+        options: [
+          "A. Cubic with positive leading coefficient",
+          "B. Cubic with negative leading coefficient, zeros at 0, 2, 3",
+          "C. Cubic with two turning points, starting positive",
+          "D. Cubic with two turning points, starting negative"
+        ],
+        correct: 1 // B
+      },
+      {
+        question: "What is ∫(1/√(x+5))dx?",
+        options: [
+          "(1/2)√(x+5) + C",
+          "2√(x+5) + C",
+          "-(1/2)√(x+5) + C",
+          "-2√(x+5) + C"
+        ],
+        correct: 1 // B. 2√(x+5) + C
+      },
+      {
+        question: "The graph of y = f(x) is shown. Which of the following is the graph of y = -f(-x)?",
+        note: "This transformation reflects across both axes",
+        options: [
+          "A. Reflection across y-axis only",
+          "B. Reflection across x-axis only",
+          "C. Reflection across both axes (180° rotation)",
+          "D. No reflection"
+        ],
+        correct: 2 // C
+      },
+      {
+        question: "A ten-sided die has faces numbered 1 to 10. The probability of rolling a 1 is greater than the probability of rolling any other number. Numbers 2-10 are equally likely.\n\nWhen rolled 153 times, a 1 is obtained 72 times.\n\nBy using relative frequency, what is the best estimate for the probability of rolling a 10?",
+        options: ["1/17", "1/11", "1/10", "1/9"],
+        correct: 3 // D. 1/9
+      },
+      {
+        question: "The minimum daily temperature, in degrees, of a town each year follows a normal distribution with its mean equal to its standard deviation. The minimum daily temperature was recorded over one year.\n\nWhat percentage of the recorded minimum daily temperatures was above zero degrees?",
+        options: ["16%", "50%", "68%", "84%"],
+        correct: 3 // D. 84%
+      },
+      {
+        question: "Given f(1) = 6 and the graph of y = f'(x), which interval includes the best estimate for f(1.1)?",
+        note: "Looking at the derivative graph to estimate the change",
+        options: [
+          "[6.2, 6.4)",
+          "[6.0, 6.2)",
+          "[5.8, 6.0)",
+          "[5.6, 5.8)"
+        ],
+        correct: 1 // B. [6.0, 6.2)
+      },
+      {
+        question: "The graph of y = f(x), with all its stationary points, is shown.\n\nHow many stationary points does the graph of y = f(eˣ) have?",
+        options: ["0", "1", "2", "3"],
+        correct: 3 // D. 3
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    function renderMathQuestion() {
+      const q = MATH_QUESTIONS[currentQuestion];
+      const optionLabels = ['A.', 'B.', 'C.', 'D.'];
+      
+      popupContent.innerHTML = `
+        <h2 id="popup-title">📐 Mathematics Quiz</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 16px;">
+          Question ${currentQuestion + 1} of ${MATH_QUESTIONS.length}
+        </p>
+        <div style="margin: 20px 0; text-align: left; max-width: 540px; margin-left: auto; margin-right: auto;">
+          <p style="font-weight: 600; font-size: 1.05rem; margin-bottom: 12px; white-space: pre-wrap; line-height: 1.6;">${q.question}</p>
+          ${q.note ? `<p style="font-size: 0.9rem; color: #666; font-style: italic; margin-bottom: 12px;">${q.note}</p>` : ''}
+          <form id="math-quiz-form">
+            ${q.options.map((option, index) => `
+              <label style="display: block; padding: 12px; margin: 10px 0; background: rgba(0,0,0,0.02); border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;" 
+                     class="math-quiz-option" data-index="${index}">
+                <input type="radio" name="answer" value="${index}" style="margin-right: 8px;">
+                <strong>${optionLabels[index]}</strong> ${option}
+              </label>
+            `).join('')}
+            <button type="submit" class="submit-btn" style="margin-top: 16px;">Submit Answer</button>
+          </form>
+          <div id="math-quiz-feedback" class="answer-feedback" style="margin-top: 12px;"></div>
+        </div>
+        <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
+      `;
+
+      popup.classList.remove('hidden');
+      bindCloseButton();
+
+      const form = document.getElementById('math-quiz-form');
+      const feedback = document.getElementById('math-quiz-feedback');
+      
+      // Add hover effect to options
+      document.querySelectorAll('.math-quiz-option').forEach(label => {
+        label.addEventListener('mouseenter', () => {
+          label.style.borderColor = 'var(--green)';
+          label.style.background = 'rgba(28, 107, 42, 0.08)';
+        });
+        label.addEventListener('mouseleave', () => {
+          if (!label.querySelector('input').checked) {
+            label.style.borderColor = 'transparent';
+            label.style.background = 'rgba(0,0,0,0.02)';
+          }
+        });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="answer"]:checked');
+        
+        if (!selected) {
+          feedback.textContent = '⚠️ Please select an answer!';
+          feedback.className = 'answer-feedback bad';
+          return;
+        }
+
+        const answer = parseInt(selected.value);
+        
+        if (answer === q.correct) {
+          feedback.textContent = '✅ Correct!';
+          feedback.className = 'answer-feedback ok';
+          
+          try { 
+            trumpetSfx.currentTime = 0; 
+            trumpetSfx.play(); 
+          } catch (_) {}
+
+          currentQuestion++;
+          
+          if (currentQuestion < MATH_QUESTIONS.length) {
+            showToast(`✅ Correct! Question ${currentQuestion + 1} coming up...`);
+            setTimeout(() => renderMathQuestion(), 1500);
+          } else {
+            // Quiz completed
+            setTimeout(() => {
+              popupContent.innerHTML = `
+                <h2 id="popup-title">🎉 Outstanding Work!</h2>
+                <p style="font-size: 1.3rem; margin: 20px 0;">Perfect Score! 💯</p>
+                <p style="font-size: 1.1rem; margin: 16px 0;">
+                  You conquered all ${MATH_QUESTIONS.length} challenging math questions! 🎯
+                </p>
+                <p style="font-size: 1rem; color: #666;">Your mathematical prowess is impressive!</p>
+                <p style="font-size: 1rem; margin-top: 12px;">You may now open your gift! 🎁</p>
+                <button id="close-btn" class="close-btn" type="button" aria-label="Close popup">Close</button>
+              `;
+              createConfetti();
+              bindCloseButton();
+            }, 1500);
+          }
+        } else {
+          feedback.textContent = '❌ Not quite! Try again.';
+          feedback.className = 'answer-feedback bad';
+          
+          // Shake the form
+          form.style.animation = 'shake 0.3s ease-in-out';
+          setTimeout(() => {
+            form.style.animation = '';
+          }, 300);
+        }
+      });
+    }
+
+    renderMathQuestion();
+  }
+
+  function renderDay18Popup() {
+    popupContent.innerHTML = `
+      <h2 id="popup-title">🎓 Congratulations!</h2>
+      <p style="font-size: 1.4rem; margin: 20px 0; font-weight: 600; color: var(--green);">
+        Congratulations on Your Scholarship!
+      </p>
+      <p style="font-size: 1.2rem; margin: 16px 0;">
+        🌟 Your hard work has paid off! 🌟
+      </p>
+      <p style="font-size: 1.1rem; margin: 16px 0; color: #555;">
+        Go open your gift to celebrate this amazing achievement!
+      </p>
+      <div style="font-size: 3rem; margin: 20px 0;">🎁🎉</div>
+      <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
+    `;
+
+    popup.classList.remove('hidden');
+    bindCloseButton();
+    
+    // Play celebration sound and confetti
+    try { 
+      trumpetSfx.currentTime = 0; 
+      trumpetSfx.play(); 
+    } catch (_) {}
+    
+    createConfetti();
+  }
+
   // ============================================================================
   // DAY BOX CLICK HANDLERS
   // ============================================================================
@@ -739,6 +964,12 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         case 16:
           renderDay16QuizPopup();
+          break;
+        case 17:
+          renderDay17MathQuiz();
+          break;
+        case 18:
+          renderDay18Popup();
           break;
         default:
           renderMessagePopup('🎅 Santa has not revealed this surprise yet! Check back soon!');
