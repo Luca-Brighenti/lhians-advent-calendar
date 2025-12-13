@@ -490,6 +490,205 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function renderDay15Popup() {
+    popupContent.innerHTML = `
+      <h2 id="popup-title">🎯 Challenge Time!</h2>
+      <p style="font-size: 1.2rem; margin: 20px 0;">Have Fun Beating Me</p>
+      <p style="margin: 16px 0;">
+        <a href="https://humanbenchmark.com/" target="_blank" rel="noopener" 
+           style="color: var(--green); font-weight: 600; font-size: 1.1rem; text-decoration: underline;">
+          🧠 Human Benchmark →
+        </a>
+      </p>
+      <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
+    `;
+
+    popup.classList.remove('hidden');
+    bindCloseButton();
+  }
+
+  function renderDay16QuizPopup() {
+    // Quiz questions with images and answers
+    const QUIZ_QUESTIONS = [
+      {
+        question: "What is C?",
+        options: [
+          "A web browser",
+          "A programming language",
+          "An operating system",
+          "A text editor"
+        ],
+        correct: 1 // Index of correct answer (b)
+      },
+      {
+        question: "Which of the following is a valid C comment?",
+        options: [
+          "# This is a comment",
+          "// This is a comment",
+          "-- This is a comment",
+          "** This is a comment"
+        ],
+        correct: 1 // (b)
+      },
+      {
+        question: "Which line correctly includes the standard input/output header in C?",
+        options: [
+          "#include <stdio.h>",
+          '#include "stdio.h"',
+          "include <stdio.h>",
+          "import <stdio.h>"
+        ],
+        correct: 0 // (a)
+      },
+      {
+        question: "Which function is the entry point of every C program?",
+        options: [
+          "start()",
+          "main()",
+          "begin()",
+          "run()"
+        ],
+        correct: 1 // (b)
+      },
+      {
+        question: 'Which line correctly prints "Hello, world!" followed by a new line?',
+        options: [
+          'printf("Hello, world!");',
+          'print("Hello, world!\\n");',
+          'printf("Hello, world!\\n");',
+          'cout << "Hello, world!" << endl;'
+        ],
+        correct: 2 // (c)
+      },
+      {
+        question: "Which of these is a correct declaration of an integer variable in C?",
+        options: [
+          "int x;",
+          "integer x;",
+          "num x;",
+          "x int;"
+        ],
+        correct: 0 // (a)
+      },
+      {
+        question: "What is the output of this code?\n\nint x = 10;\nprintf(\"%d\", x);",
+        options: [
+          "Nothing (no output)",
+          "x",
+          "10",
+          "%d"
+        ],
+        correct: 2 // (c) 10
+      }
+    ];
+
+    let currentQuestion = 0;
+
+    function renderQuestion() {
+      const q = QUIZ_QUESTIONS[currentQuestion];
+      const optionLabels = ['a)', 'b)', 'c)', 'd)'];
+      
+      popupContent.innerHTML = `
+        <h2 id="popup-title">📚 C Programming Quiz</h2>
+        <p style="font-size: 0.9rem; color: #666; margin-bottom: 16px;">
+          Question ${currentQuestion + 1} of ${QUIZ_QUESTIONS.length}
+        </p>
+        <div style="margin: 20px 0; text-align: left; max-width: 500px; margin-left: auto; margin-right: auto;">
+          <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 16px; white-space: pre-wrap;">${q.question}</p>
+          <form id="quiz-form">
+            ${q.options.map((option, index) => `
+              <label style="display: block; padding: 10px; margin: 8px 0; background: ${index === q.correct ? 'rgba(28, 107, 42, 0.05)' : 'rgba(0,0,0,0.02)'}; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: all 0.2s;" 
+                     class="quiz-option" data-index="${index}">
+                <input type="radio" name="answer" value="${index}" style="margin-right: 8px;">
+                <strong>${optionLabels[index]}</strong> ${option}
+              </label>
+            `).join('')}
+            <button type="submit" class="submit-btn" style="margin-top: 16px;">Submit Answer</button>
+          </form>
+          <div id="quiz-feedback" class="answer-feedback" style="margin-top: 12px;"></div>
+        </div>
+        <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
+      `;
+
+      popup.classList.remove('hidden');
+      bindCloseButton();
+
+      const form = document.getElementById('quiz-form');
+      const feedback = document.getElementById('quiz-feedback');
+      
+      // Add hover effect to options
+      document.querySelectorAll('.quiz-option').forEach(label => {
+        label.addEventListener('mouseenter', () => {
+          label.style.borderColor = 'var(--green)';
+          label.style.background = 'rgba(28, 107, 42, 0.08)';
+        });
+        label.addEventListener('mouseleave', () => {
+          if (!label.querySelector('input').checked) {
+            label.style.borderColor = 'transparent';
+            const index = parseInt(label.dataset.index);
+            label.style.background = index === q.correct ? 'rgba(28, 107, 42, 0.05)' : 'rgba(0,0,0,0.02)';
+          }
+        });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const selected = form.querySelector('input[name="answer"]:checked');
+        
+        if (!selected) {
+          feedback.textContent = '⚠️ Please select an answer!';
+          feedback.className = 'answer-feedback bad';
+          return;
+        }
+
+        const answer = parseInt(selected.value);
+        
+        if (answer === q.correct) {
+          feedback.textContent = '✅ Correct!';
+          feedback.className = 'answer-feedback ok';
+          
+          try { 
+            trumpetSfx.currentTime = 0; 
+            trumpetSfx.play(); 
+          } catch (_) {}
+
+          currentQuestion++;
+          
+          if (currentQuestion < QUIZ_QUESTIONS.length) {
+            showToast(`✅ Correct! Question ${currentQuestion + 1} coming up...`);
+            setTimeout(() => renderQuestion(), 1500);
+          } else {
+            // Quiz completed
+            setTimeout(() => {
+              popupContent.innerHTML = `
+                <h2 id="popup-title">🎉 Quiz Complete!</h2>
+                <p style="font-size: 1.3rem; margin: 20px 0;">Perfect Score!</p>
+                <p style="font-size: 1.1rem; margin: 16px 0;">
+                  You got all ${QUIZ_QUESTIONS.length} questions correct! 🎯
+                </p>
+                <p style="font-size: 1rem; color: #666;">You may now open your gift! 🎁</p>
+                <button id="close-btn" class="close-btn" type="button" aria-label="Close popup">Close</button>
+              `;
+              createConfetti();
+              bindCloseButton();
+            }, 1500);
+          }
+        } else {
+          feedback.textContent = '❌ Wrong! Try again.';
+          feedback.className = 'answer-feedback bad';
+          
+          // Shake the form
+          form.style.animation = 'shake 0.3s ease-in-out';
+          setTimeout(() => {
+            form.style.animation = '';
+          }, 300);
+        }
+      });
+    }
+
+    renderQuestion();
+  }
+
   // ============================================================================
   // DAY BOX CLICK HANDLERS
   // ============================================================================
@@ -534,6 +733,12 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         case 14:
           renderDay14DownloadPopup();
+          break;
+        case 15:
+          renderDay15Popup();
+          break;
+        case 16:
+          renderDay16QuizPopup();
           break;
         default:
           renderMessagePopup('🎅 Santa has not revealed this surprise yet! Check back soon!');
