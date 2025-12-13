@@ -6,43 +6,99 @@
   <title>Lhian's Advent Calendar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <!-- Snowfall effect container -->
+  <div class="snowfall" aria-hidden="true"></div>
+  
   <header class="banner">
     <div class="banner-inner">
+      <div class="ornament ornament-left">✦</div>
+      <div class="ornament ornament-right">✦</div>
       <div class="ribbon-top"></div>
-      <h1 class="title">Lhian's</h1>
+      <h1 class="title">
+        <span class="title-word">Lhian's</span>
+      </h1>
       <p class="subtitle">Christmas Advent Calendar</p>
       <div class="ribbon-bottom"></div>
     </div>
   </header>
-
+  
   <main>
     <div id="calendar" class="calendar-grid" aria-label="Advent calendar">
       <!-- Days 10-25 -->
-      <button class="day-box red" data-day="10" aria-label="Open day 10">10</button>
-      <button class="day-box green" data-day="11" aria-label="Open day 11">11</button>
-      <button class="day-box red" data-day="12" aria-label="Open day 12">12</button>
-      <button class="day-box green" data-day="13" aria-label="Open day 13">13</button>
-      <button class="day-box green" data-day="14" aria-label="Open day 14">14</button>
-      <button class="day-box red" data-day="15" aria-label="Open day 15">15</button>
-      <button class="day-box green" data-day="16" aria-label="Open day 16">16</button>
-      <button class="day-box red" data-day="17" aria-label="Open day 17">17</button>
-      <button class="day-box red" data-day="18" aria-label="Open day 18">18</button>
-      <button class="day-box green" data-day="19" aria-label="Open day 19">19</button>
-      <button class="day-box red" data-day="20" aria-label="Open day 20">20</button>
-      <button class="day-box green" data-day="21" aria-label="Open day 21">21</button>
-      <button class="day-box green" data-day="22" aria-label="Open day 22">22</button>
-      <button class="day-box red" data-day="23" aria-label="Open day 23">23</button>
-      <button class="day-box green" data-day="24" aria-label="Open day 24">24</button>
-      <button class="day-box red" data-day="25" aria-label="Open day 25">25</button>
+      <button class="day-box red" data-day="10" aria-label="Open day 10">
+        <span class="day-number">10</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="11" aria-label="Open day 11">
+        <span class="day-number">11</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="12" aria-label="Open day 12">
+        <span class="day-number">12</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="13" aria-label="Open day 13">
+        <span class="day-number">13</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="14" aria-label="Open day 14">
+        <span class="day-number">14</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="15" aria-label="Open day 15">
+        <span class="day-number">15</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="16" aria-label="Open day 16">
+        <span class="day-number">16</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="17" aria-label="Open day 17">
+        <span class="day-number">17</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="18" aria-label="Open day 18">
+        <span class="day-number">18</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="19" aria-label="Open day 19">
+        <span class="day-number">19</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="20" aria-label="Open day 20">
+        <span class="day-number">20</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="21" aria-label="Open day 21">
+        <span class="day-number">21</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="22" aria-label="Open day 22">
+        <span class="day-number">22</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="23" aria-label="Open day 23">
+        <span class="day-number">23</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box green" data-day="24" aria-label="Open day 24">
+        <span class="day-number">24</span>
+        <span class="day-shine"></span>
+      </button>
+      <button class="day-box red" data-day="25" aria-label="Open day 25">
+        <span class="day-number">25</span>
+        <span class="day-shine"></span>
+      </button>
     </div>
   </main>
-
+  
   <!-- Popup Modal (starts hidden) -->
   <div id="popup" class="hidden" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div class="popup-backdrop"></div>
     <div class="popup-content">
       <h2 id="popup-title">🎄 Merry Christmas!</h2>
       <div class="question-wrap">
@@ -57,20 +113,26 @@
       <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
     </div>
   </div>
-
+  
   <!-- Background Music + Toggle -->
   <audio id="bg-music" src="assets/background-music.mp3" loop></audio>
   <audio id="trumpetSfx" src="assets/queen-royalty-trumpet.mp3" preload="auto"></audio>
-  <button id="mute-btn" class="mute-btn" aria-label="Toggle background music" type="button">🔇</button>
-  <button id="reset-btn" class="reset-btn" type="button" title="Reset opened chests">
-  ↺ Reset
-</button>
-
+  
+  <div class="controls-cluster">
+    <button id="mute-btn" class="mute-btn" aria-label="Toggle background music" type="button">
+      <span class="mute-icon">🔇</span>
+    </button>
+    <button id="reset-btn" class="reset-btn" type="button" title="Reset opened chests">
+      <span class="reset-icon">↺</span>
+      <span class="reset-text">Reset</span>
+    </button>
+  </div>
+  
   <footer class="footer">
-    <p>© <span id="year"></span> Lhian’s Advent Calendar</p>
+    <p>Made with ❤️ for Lhian • © <span id="year"></span></p>
   </footer>
-
+  
   <script src="config.js?v=1" defer></script>
-<script src="js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
