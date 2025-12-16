@@ -914,6 +914,123 @@ document.addEventListener('DOMContentLoaded', () => {
     createConfetti();
   }
 
+  function renderDay19Popup() {
+    popupContent.innerHTML = `
+      <h2 id="popup-title">🎵 Audio Mystery</h2>
+      <p style="font-size: 1.1rem; margin: 16px 0;">
+        Download and listen to this audio file carefully...
+      </p>
+      
+      <button id="download-audio-btn" class="download-btn" type="button" style="margin: 20px auto;">
+        ⬇️ Download Coagula.wav
+      </button>
+      
+      <div style="margin: 24px 0; padding: 20px; background: rgba(0,0,0,0.03); border-radius: 12px; border: 2px dashed var(--green);">
+        <p style="font-size: 1rem; font-weight: 600; margin-bottom: 12px;">
+          What do you hear? Enter the code:
+        </p>
+        <form id="audio-code-form" style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+          <input 
+            id="audio-code-input" 
+            type="text" 
+            class="answer-input" 
+            placeholder="Enter code here" 
+            autocomplete="off"
+            style="text-align: center; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; max-width: 200px;"
+          />
+          <button type="submit" class="submit-btn">Submit Code</button>
+        </form>
+        <div id="audio-code-feedback" class="answer-feedback" style="margin-top: 12px;"></div>
+      </div>
+      
+      <button id="close-btn" class="close-btn" aria-label="Close popup" type="button">Close</button>
+    `;
+
+    popup.classList.remove('hidden');
+    bindCloseButton();
+
+    const downloadBtn = document.getElementById('download-audio-btn');
+    const form = document.getElementById('audio-code-form');
+    const input = document.getElementById('audio-code-input');
+    const feedback = document.getElementById('audio-code-feedback');
+
+    // Download button handler
+    if (downloadBtn) {
+      downloadBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        const link = document.createElement('a');
+        link.href = 'assets/Coagula.wav';
+        link.download = 'Coagula.wav';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        showToast('📥 Coagula.wav downloaded! Listen carefully...');
+        
+        // Visual feedback on button
+        downloadBtn.textContent = '✓ Downloaded!';
+        downloadBtn.style.background = 'linear-gradient(135deg, var(--ok), #1e7e34)';
+        setTimeout(() => {
+          downloadBtn.textContent = '⬇️ Download Coagula.wav';
+          downloadBtn.style.background = '';
+        }, 2000);
+      });
+    }
+
+    // Auto-focus input after animation
+    setTimeout(() => input && input.focus(), 300);
+
+    // Form submission handler
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const answer = input.value.trim().toUpperCase();
+      
+      if (!answer) {
+        feedback.textContent = '⚠️ Please enter a code!';
+        feedback.className = 'answer-feedback bad';
+        return;
+      }
+
+      if (answer === 'B4Z') {
+        // Correct answer
+        feedback.textContent = '✅ Correct!';
+        feedback.className = 'answer-feedback ok';
+        
+        try { 
+          trumpetSfx.currentTime = 0; 
+          trumpetSfx.play(); 
+        } catch (_) {}
+
+        setTimeout(() => {
+          popupContent.innerHTML = `
+            <h2 id="popup-title">🎉 Code Cracked!</h2>
+            <p style="font-size: 1.3rem; margin: 20px 0;">You deciphered the audio message!</p>
+            <p style="font-size: 1.1rem; margin: 16px 0; color: #555;">
+              The code <strong style="color: var(--green); letter-spacing: 2px;">B4Z</strong> was hidden in the sound waves.
+            </p>
+            <p style="font-size: 1rem; margin-top: 20px;">You may now open your gift! 🎁</p>
+            <button id="close-btn" class="close-btn" type="button" aria-label="Close popup">Close</button>
+          `;
+          createConfetti();
+          bindCloseButton();
+        }, 1500);
+      } else {
+        // Wrong answer
+        feedback.textContent = `❌ "${answer}" is incorrect. Listen more carefully...`;
+        feedback.className = 'answer-feedback bad';
+        
+        // Shake the input
+        input.style.animation = 'shake 0.3s ease-in-out';
+        setTimeout(() => {
+          input.style.animation = '';
+          input.select();
+        }, 300);
+      }
+    });
+  }
+
   // ============================================================================
   // DAY BOX CLICK HANDLERS
   // ============================================================================
@@ -970,6 +1087,9 @@ document.addEventListener('DOMContentLoaded', () => {
           break;
         case 18:
           renderDay18Popup();
+          break;
+        case 19:
+          renderDay19Popup();
           break;
         default:
           renderMessagePopup('🎅 Santa has not revealed this surprise yet! Check back soon!');
